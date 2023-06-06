@@ -55,13 +55,13 @@ app.post("/create", (req: Request, res: Response): Response => {
 
 app.get("/:id", (req: Request, res: Response): Response => {
     try{
-        const id  = req.params;
+        const {id}  = req.params;
         console.log(id)
         
-        const newdatA=  dataSet.filter( (el: any)=> {
-            return el.id === id.id;
+     let newdatA=  dataSet.filter( (el: any)=> {
+            return el.id === id;
         });
-        return res.status(201).json({
+        return res.status(200).json({
             message: "getting single data",
             data: newdatA,
         });
@@ -72,14 +72,20 @@ app.get("/:id", (req: Request, res: Response): Response => {
 
 app.get("/api/github", async (req: Request, res: Response) => {
     try {
-        const { name } = req.body;
+        const {name} = req.body;
         console.log(name)
         const url = `https://api.github.com/users/${name}`;
 
      let myData = await axios.get(url).then((res) => {
         // console.log(res);
-        return res.data;
-     });
+        return res.data
+     }).catch((error) =>{
+    throw error
+     }).finally(() => {
+        console.log("it is fine");
+        
+     }
+     )
 
      res.status(200).json({ message: "success", data: myData});
       
